@@ -7,7 +7,8 @@ export async function callDiagnosis(description, imgBase64, imgType, _unused, cl
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error || `API error ${res.status}`);
+    const msg = typeof err.error === 'string' ? err.error : err.error?.message || err.message || `API error ${res.status}`;
+    throw new Error(msg);
   }
 
   const data = await res.json();
