@@ -8,7 +8,7 @@ const ITEMS = [
 
 export default function BottomNav({ active = 'home', onNavigate }) {
   return (
-    <div className="flex border-t border-gray-100 bg-white flex-shrink-0">
+    <div className="flex border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 flex-shrink-0">
       {ITEMS.map((it) => {
         const isActive = it.id === active;
         return (

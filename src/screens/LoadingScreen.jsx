@@ -13,8 +13,11 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-white items-center justify-center px-8">
-      <div className="w-16 h-16 rounded-3xl mb-8 flex items-center justify-center text-3xl pulse" style={{ background: '#E8F5F0' }}>
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 items-center justify-center px-8">
+      <div
+        className="w-16 h-16 rounded-3xl mb-8 flex items-center justify-center text-3xl pulse"
+        style={{ background: 'var(--c-icon-bg)' }}
+      >
         🤖
       </div>
       <div className="w-full max-w-xs space-y-4">
@@ -27,12 +30,12 @@ export default function LoadingScreen() {
                   ? { background: '#16A34A', color: '#fff' }
                   : i === step
                   ? { border: `2px solid ${G}`, borderTopColor: 'transparent' }
-                  : { border: '2px solid #E5E7EB' }
+                  : { border: '2px solid var(--c-border)' }
               }
             >
               {i < step ? '✓' : ''}
             </div>
-            <p className={`text-sm ${i <= step ? 'text-gray-800' : 'text-gray-400'}`}>{s}</p>
+            <p className={`text-sm ${i <= step ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 dark:text-gray-600'}`}>{s}</p>
           </div>
         ))}
       </div>

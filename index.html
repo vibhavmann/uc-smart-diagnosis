@@ -4,7 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>uc-smart-diagnosis</title>
+    <title>UC Smart Diagnosis</title>
+    <script>
+      (function () {
+        try {
+          var dark = localStorage.getItem('uc-dark-mode') === 'true' ||
+            (localStorage.getItem('uc-dark-mode') === null &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

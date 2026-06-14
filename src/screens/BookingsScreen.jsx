@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
 import BottomNav from '../components/BottomNav';
 import Badge from '../components/Badge';
+import { supabase } from '../lib/supabase';
 
 const G = '#0B6E4F';
-const BG = '#F6F6F6';
 
 function fmt(n) { return (n || 0).toLocaleString('en-IN'); }
 
@@ -17,21 +18,92 @@ function serviceIcon(name = '') {
   return '🔨';
 }
 
-export default function BookingsScreen({ bookings, onNavigate }) {
+function BookingCard({ b }) {
   return (
-    <div className="flex flex-col h-full" style={{ background: BG }}>
-      {/* header */}
-      <div className="bg-white px-4 pt-10 pb-4 border-b border-gray-100 flex-shrink-0">
-        <h1 className="text-lg font-bold text-gray-900">My Bookings</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Current session only</p>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 slide-up">
+      <div className="flex items-start gap-3 mb-3">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+          style={{ background: 'var(--c-icon-bg)' }}
+        >
+          {serviceIcon(b.service)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{b.service}</p>
+            <Badge variant="green">Confirmed</Badge>
+          </div>
+          {b.variant && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{b.variant}</p>}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="rounded-xl p-2.5" style={{ background: 'var(--c-bg)' }}>
+          <p className="text-gray-400 dark:text-gray-500 mb-0.5">Slot</p>
+          <p className="font-semibold text-gray-800 dark:text-gray-200">
+            {b.slot ? `${b.slot.day}, ${b.slot.time}` : b.slot_day ? `${b.slot_day}, ${b.slot_time}` : '—'}
+          </p>
+        </div>
+        <div className="rounded-xl p-2.5" style={{ background: 'var(--c-bg)' }}>
+          <p className="text-gray-400 dark:text-gray-500 mb-0.5">Estimate</p>
+          <p className="font-semibold" style={{ color: G }}>
+            ₹{fmt(b.priceLow ?? b.price_low)}–{fmt(b.priceHigh ?? b.price_high)}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-2.5 flex items-center justify-between">
+        <p className="text-[10px] text-gray-400 dark:text-gray-500">
+          Booking ID: <span className="font-semibold text-gray-600 dark:text-gray-400">{b.id}</span>
+        </p>
+        <Badge variant="blue">Upcoming</Badge>
+      </div>
+    </div>
+  );
+}
+
+export default function BookingsScreen({ bookings: localBookings, onNavigate, user }) {
+  const [dbBookings, setDbBookings] = useState(null);
+  const [loadingDb, setLoadingDb] = useState(false);
+
+  useEffect(() => {
+    if (!supabase || !user) return;
+    setLoadingDb(true);
+    supabase
+      .from('bookings')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (!error && data) setDbBookings(data);
+        setLoadingDb(false);
+      });
+  }, [user]);
+
+  const displayBookings = dbBookings !== null ? dbBookings : [...localBookings].reverse();
+  const isEmpty = displayBookings.length === 0 && !loadingDb;
+
+  return (
+    <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
+      <div className="bg-white dark:bg-gray-900 px-4 pt-10 pb-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
+        <h1 className="text-lg font-bold text-gray-900 dark:text-white">My Bookings</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+          {user && supabase ? 'Synced to your account' : 'Current session only'}
+        </p>
       </div>
 
       <div className="flex-1 scroll-hide px-4 pt-4 pb-4">
-        {bookings.length === 0 ? (
+        {loadingDb ? (
+          <div className="flex items-center justify-center h-32">
+            <div className="w-6 h-6 rounded-full spinner" style={{ border: `2px solid ${G}`, borderTopColor: 'transparent' }} />
+          </div>
+        ) : isEmpty ? (
           <div className="flex flex-col items-center justify-center h-full text-center pb-16">
             <span className="text-5xl mb-4">📋</span>
-            <p className="text-sm font-semibold text-gray-700 mb-1">No bookings yet</p>
-            <p className="text-xs text-gray-400 mb-5">Use Smart Diagnosis to book your first service</p>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">No bookings yet</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-5">
+              Use Smart Diagnosis to book your first service
+            </p>
             <button
               className="px-5 py-2.5 rounded-2xl text-white text-sm font-semibold"
               style={{ background: G }}
@@ -42,45 +114,7 @@ export default function BookingsScreen({ bookings, onNavigate }) {
           </div>
         ) : (
           <div className="space-y-3">
-            {[...bookings].reverse().map((b) => (
-              <div key={b.id} className="bg-white rounded-2xl p-4 border border-gray-100 slide-up">
-                <div className="flex items-start gap-3 mb-3">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                    style={{ background: '#E8F5F0' }}
-                  >
-                    {serviceIcon(b.service)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-bold text-gray-900 truncate">{b.service}</p>
-                      <Badge variant="green">Confirmed</Badge>
-                    </div>
-                    {b.variant && <p className="text-xs text-gray-500 mt-0.5">{b.variant}</p>}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-gray-50 rounded-xl p-2.5">
-                    <p className="text-gray-400 mb-0.5">Slot</p>
-                    <p className="font-semibold text-gray-800">
-                      {b.slot ? `${b.slot.day}, ${b.slot.time}` : '—'}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 rounded-xl p-2.5">
-                    <p className="text-gray-400 mb-0.5">Estimate</p>
-                    <p className="font-semibold" style={{ color: G }}>
-                      ₹{fmt(b.priceLow)}–{fmt(b.priceHigh)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-2.5 flex items-center justify-between">
-                  <p className="text-[10px] text-gray-400">Booking ID: <span className="font-semibold text-gray-600">{b.id}</span></p>
-                  <Badge variant="blue">Upcoming</Badge>
-                </div>
-              </div>
-            ))}
+            {displayBookings.map((b) => <BookingCard key={b.id} b={b} />)}
           </div>
         )}
       </div>

@@ -10,7 +10,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Desktop: slate surround. Mobile: plain white. */
+/* Semantic color tokens — switch automatically with .dark on <html> */
+:root {
+  --c-bg: #F6F6F6;
+  --c-surface: #FFFFFF;
+  --c-icon-bg: #E8F5F0;
+  --c-border: #F3F4F6;
+}
+
+.dark {
+  --c-bg: #0F172A;
+  --c-surface: #1E293B;
+  --c-icon-bg: #064E3B;
+  --c-border: #334155;
+}
+
 #root {
   min-height: 100vh;
   background: #fff;
@@ -18,6 +32,7 @@ body {
   flex-direction: column;
 }
 
+/* Desktop surround */
 @media (min-width: 640px) {
   #root {
     background: #94A3B8;
@@ -25,6 +40,12 @@ body {
     justify-content: center;
     padding: 32px 16px;
   }
+}
+
+.dark #root { background: #0F172A; }
+
+@media (min-width: 640px) {
+  .dark #root { background: #020617; }
 }
 
 .phone {
