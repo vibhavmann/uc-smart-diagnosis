@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { callDiagnosis } from './api';
-import ApiKeyScreen from './screens/ApiKeyScreen';
+// ApiKeyScreen removed — key is set via VITE_ANTHROPIC_KEY env var
 import HomeScreen from './screens/HomeScreen';
 import IntakeScreen from './screens/IntakeScreen';
 import LoadingScreen from './screens/LoadingScreen';
@@ -34,8 +34,8 @@ function StatusBar() {
 }
 
 export default function App() {
-  const [screen, setScreen] = useState('apikey');
-  const [apiKey, setApiKey] = useState('');
+  const [screen, setScreen] = useState('home');
+  const [apiKey] = useState('');
   const [desc, setDesc] = useState('');
   const [img, setImg] = useState(null);
   const [result, setResult] = useState(null);
@@ -70,9 +70,6 @@ export default function App() {
     >
       <StatusBar />
       <div className="absolute inset-0 flex flex-col pt-10">
-        {screen === 'apikey' && (
-          <ApiKeyScreen onSet={(k) => { setApiKey(k); setScreen('home'); }} />
-        )}
         {screen === 'home' && (
           <HomeScreen onIntake={() => setScreen('intake')} />
         )}

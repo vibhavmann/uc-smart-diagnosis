@@ -1,6 +1,9 @@
 import { CATALOG } from './catalog';
 
-export async function callDiagnosis(description, imgBase64, imgType, apiKey, clarification) {
+const HARDCODED_KEY = import.meta.env.VITE_ANTHROPIC_KEY || '';
+
+export async function callDiagnosis(description, imgBase64, imgType, _apiKey, clarification) {
+  const apiKey = HARDCODED_KEY;
   const system = `You are Urban Company's AI diagnosis engine. Given the user's problem and the service catalog JSON below, return ONLY a valid JSON object — no prose, no markdown fences.
 
 Schema (MUST match exactly):
