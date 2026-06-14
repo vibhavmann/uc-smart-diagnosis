@@ -1,0 +1,110 @@
+import { useState, useRef } from 'react';
+import { CHIPS } from '../catalog';
+
+const G = '#0B6E4F';
+
+export default function IntakeScreen({ onBack, onDiagnose, error }) {
+  const [text, setText] = useState('');
+  const [img, setImg] = useState(null);
+  const [activeChip, setActiveChip] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef();
+
+  const pickChip = (c) => { setText(c.text); setActiveChip(c.label); };
+
+  const handleFile = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const b64 = ev.target.result.split(',')[1];
+      setImg({ base64: b64, type: f.type, preview: ev.target.result });
+    };
+    reader.readAsDataURL(f);
+  };
+
+  const go = async () => {
+    if (!text.trim() || busy) return;
+    setBusy(true);
+    await onDiagnose(text.trim(), img);
+    setBusy(false);
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-white">
+      <div className="px-4 pt-10 pb-4 border-b border-gray-100 flex-shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1 text-gray-400 text-sm mb-3">← Back</button>
+        <h1 className="text-lg font-bold text-gray-900">Smart Diagnosis</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Describe your problem — AI will find the right service</p>
+      </div>
+
+      <div className="flex-1 scroll-hide px-4 pt-4 pb-4 space-y-4">
+        <textarea
+          className="w-full border border-gray-200 rounded-2xl p-4 text-sm resize-none outline-none min-h-[110px] text-gray-900 placeholder-gray-400"
+          style={{ fontFamily: 'inherit' }}
+          placeholder={'Describe your problem in your own words…\ne.g. "My AC runs but the room won\'t cool"'}
+          value={text}
+          onChange={(e) => { setText(e.target.value); setActiveChip(null); }}
+        />
+
+        <div>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Try an example</p>
+          <div className="flex flex-wrap gap-2">
+            {CHIPS.map((c) => (
+              <button
+                key={c.label}
+                onClick={() => pickChip(c)}
+                className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
+                style={
+                  activeChip === c.label
+                    ? { background: G, color: '#fff', borderColor: 'transparent' }
+                    : { background: '#fff', color: '#4B5563', borderColor: '#E5E7EB' }
+                }
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="border-2 border-dashed border-gray-200 rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer"
+          onClick={() => fileRef.current && fileRef.current.click()}
+        >
+          {img ? (
+            <div className="relative w-full">
+              <img src={img.preview} alt="upload" className="w-full h-28 object-cover rounded-xl" />
+              <button
+                className="absolute top-2 right-2 w-6 h-6 bg-black/50 rounded-full text-white text-xs flex items-center justify-center"
+                onClick={(e) => { e.stopPropagation(); setImg(null); }}
+              >✕</button>
+            </div>
+          ) : (
+            <>
+              <span className="text-2xl">📷</span>
+              <p className="text-xs text-gray-500 text-center">Tap to add a photo (optional)<br />Helps the AI diagnose faster</p>
+            </>
+          )}
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+
+        {error && (
+          <div className="bg-red-50 border border-red-100 rounded-2xl p-3 slide-up">
+            <p className="text-xs text-red-600">⚠️ {error}</p>
+          </div>
+        )}
+      </div>
+
+      <div className="px-4 pb-8 pt-3 border-t border-gray-100 flex-shrink-0">
+        <button
+          className="w-full py-4 rounded-2xl text-white font-semibold text-sm"
+          style={{ background: text.trim() && !busy ? G : '#D1D5DB' }}
+          onClick={go}
+          disabled={!text.trim() || busy}
+        >
+          {busy ? 'Diagnosing…' : 'Diagnose my problem ✨'}
+        </button>
+      </div>
+    </div>
+  );
+}
