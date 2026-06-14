@@ -103,8 +103,11 @@ export default async function handler(req, res) {
   if (!description) return res.status(400).json({ error: 'description required' });
 
   const apiKey = process.env.ANTHROPIC_KEY;
-  console.log('ANTHROPIC_KEY present:', Boolean(apiKey), 'length:', apiKey?.length ?? 0, 'keys:', Object.keys(process.env).filter(k => k.includes('ANTHROPIC')));
-  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_KEY env var not set' });
+  if (!apiKey) return res.status(500).json({
+    error: 'ANTHROPIC_KEY env var not set',
+    detail: process.env.ANTHROPIC_KEY === undefined ? 'var is missing entirely' : 'var is set but empty',
+    anthropicKeys: Object.keys(process.env).filter(k => k.startsWith('ANTHROPIC')),
+  });
 
   // RAG retrieval — only runs if Voyage + Supabase are configured
   const voyageKey = process.env.VOYAGE_API_KEY;
