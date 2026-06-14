@@ -1,3 +1,4 @@
+// v2
 export async function callDiagnosis(description, imgBase64, imgType, _unused, clarification) {
   const res = await fetch('/api/diagnose', {
     method: 'POST',
