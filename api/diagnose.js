@@ -99,15 +99,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { description, imgBase64, imgType, clarification } = req.body;
+  const { description, imgBase64, imgType, clarification, apiKey: bodyKey } = req.body;
   if (!description) return res.status(400).json({ error: 'description required' });
 
-  const apiKey = process.env.ANTHROPIC_KEY;
-  if (!apiKey) return res.status(500).json({
-    error: 'ANTHROPIC_KEY env var not set',
-    detail: process.env.ANTHROPIC_KEY === undefined ? 'var is missing entirely' : 'var is set but empty',
-    anthropicKeys: Object.keys(process.env).filter(k => k.startsWith('ANTHROPIC')),
-  });
+  const apiKey = process.env.ANTHROPIC_KEY || bodyKey;
+  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_KEY env var not set' });
 
   // RAG retrieval — only runs if Voyage + Supabase are configured
   const voyageKey = process.env.VOYAGE_API_KEY;

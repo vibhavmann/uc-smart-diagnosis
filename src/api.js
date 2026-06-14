@@ -2,7 +2,7 @@ export async function callDiagnosis(description, imgBase64, imgType, _unused, cl
   const res = await fetch('/api/diagnose', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ description, imgBase64, imgType, clarification }),
+    body: JSON.stringify({ description, imgBase64, imgType, clarification, apiKey: import.meta.env.VITE_ANTHROPIC_KEY }),
   });
 
   if (!res.ok) {
