@@ -5,12 +5,12 @@ import { CATALOG } from '../catalog';
 const G = '#0B6E4F';
 const BG = '#F6F6F6';
 
-export default function HomeScreen({ onIntake }) {
+export default function HomeScreen({ onIntake, onDemo, onNavigate }) {
   return (
     <div className="flex flex-col h-full" style={{ background: BG }}>
       {/* top bar */}
       <div className="bg-white px-4 pt-10 pb-3 border-b border-gray-100 flex-shrink-0">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-3">
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 mb-0.5 uppercase tracking-wide">Delivering to</p>
             <div className="flex items-center gap-1">
@@ -20,9 +20,32 @@ export default function HomeScreen({ onIntake }) {
           </div>
           <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-base">👤</div>
         </div>
+        {/* search bar */}
+        <div
+          className="flex items-center gap-2 bg-gray-100 rounded-2xl px-4 py-3 cursor-pointer active:bg-gray-200 transition-colors"
+          onClick={onIntake}
+        >
+          <span className="text-gray-400 text-sm">🔍</span>
+          <span className="text-sm text-gray-400">Search for a service…</span>
+        </div>
       </div>
 
       <div className="flex-1 scroll-hide px-4 pt-4 pb-4">
+        {/* guided demo banner */}
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 flex items-center justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-amber-900">See it in action</p>
+            <p className="text-xs text-amber-700 mt-0.5">Watch the AI diagnose a real UC problem live</p>
+          </div>
+          <button
+            className="flex-shrink-0 px-3 py-2 rounded-xl text-white text-xs font-bold active:opacity-80"
+            style={{ background: '#D97706' }}
+            onClick={onDemo}
+          >
+            Live Demo →
+          </button>
+        </div>
+
         {/* AI hero card */}
         <div
           className="rounded-3xl p-5 mb-5 cursor-pointer active:scale-[0.98] transition-transform"
@@ -36,7 +59,7 @@ export default function HomeScreen({ onIntake }) {
             Not sure what you need?<br />Describe it — we'll diagnose.
           </h2>
           <p className="text-white/75 text-xs leading-relaxed mb-4">
-            Get the right service + an honest price estimate before you book. No surprises on-site.
+            Get the right service + an honest price before you book. No surprises on-site.
           </p>
           <div className="inline-flex items-center gap-2 bg-white rounded-full px-3.5 py-2">
             <span className="text-sm" style={{ color: G }}>🤖</span>
@@ -85,7 +108,7 @@ export default function HomeScreen({ onIntake }) {
         </div>
       </div>
 
-      <BottomNav active="home" />
+      <BottomNav active="home" onNavigate={onNavigate} />
     </div>
   );
 }
