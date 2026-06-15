@@ -9,16 +9,26 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
   const [img, setImg] = useState(null);
   const [activeChip, setActiveChip] = useState(demoText ? DEMO_CHIP : null);
   const [busy, setBusy] = useState(false);
+  const [countdown, setCountdown] = useState(10);
   const fileRef = useRef();
+  const autoTimer = useRef(null);
+  const countdownInterval = useRef(null);
   const isDemo = Boolean(demoText);
 
   useEffect(() => {
     if (!isDemo) return;
-    const t = setTimeout(() => {
+    countdownInterval.current = setInterval(() => {
+      setCountdown((n) => Math.max(0, n - 1));
+    }, 1000);
+    autoTimer.current = setTimeout(() => {
+      clearInterval(countdownInterval.current);
       setBusy(true);
       onDiagnose(text, null);
-    }, 900);
-    return () => clearTimeout(t);
+    }, 10000);
+    return () => {
+      clearTimeout(autoTimer.current);
+      clearInterval(countdownInterval.current);
+    };
   }, []); // eslint-disable-line
 
   const pickChip = (c) => { setText(c.text); setActiveChip(c.label); };
@@ -36,6 +46,8 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
 
   const go = async () => {
     if (!text.trim() || busy) return;
+    clearTimeout(autoTimer.current);
+    clearInterval(countdownInterval.current);
     setBusy(true);
     await onDiagnose(text.trim(), img);
     setBusy(false);
@@ -57,7 +69,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
         {isDemo && (
           <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-2xl px-4 py-3 flex items-center gap-2 slide-up">
             <span className="text-base">🎬</span>
-            <p className="text-xs text-amber-800 dark:text-amber-300 font-medium">Demo scenario loaded — diagnosing automatically…</p>
+            <p className="text-xs text-amber-800 dark:text-amber-300 font-medium">Demo scenario loaded — read through, then hit the button or wait {countdown}s</p>
           </div>
         )}
 
@@ -130,7 +142,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
           onClick={go}
           disabled={!text.trim() || busy}
         >
-          {busy ? 'Diagnosing…' : 'Diagnose my problem ✨'}
+          {busy ? 'Diagnosing…' : isDemo ? `Diagnose my problem ✨  (${countdown}s)` : 'Diagnose my problem ✨'}
         </button>
       </div>
     </div>
