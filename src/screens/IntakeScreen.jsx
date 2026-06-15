@@ -74,7 +74,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
         )}
 
         <textarea
-          className="w-full border rounded-2xl p-4 text-sm resize-none outline-none min-h-[110px] text-gray-900 placeholder-purple-300 bg-white"
+          className="w-full border rounded-2xl p-4 text-sm resize-none outline-none min-h-[110px] text-gray-900 placeholder-gray-400 bg-white"
           style={{ fontFamily: 'inherit', borderColor: isDemo ? '#FCD34D' : 'var(--c-border)' }}
           placeholder={'Describe your problem in your own words…\ne.g. "My AC runs but the room won\'t cool"'}
           value={text}

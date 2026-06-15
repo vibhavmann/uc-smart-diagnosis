@@ -16,7 +16,11 @@ export default function AccountScreen({ onNavigate, onLogin }) {
           </p>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center px-8 text-center pb-16">
-          <span className="text-5xl mb-4">👤</span>
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: 'var(--c-icon-bg)' }}>
+            <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-gray-400" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </div>
           <p className="text-sm font-semibold text-gray-700 mb-1">
             {hasSupabase ? "You're not signed in" : 'Set up Supabase to enable login'}
           </p>
@@ -59,11 +63,10 @@ export default function AccountScreen({ onNavigate, onLogin }) {
           {avatar ? (
             <img src={avatar} alt={name} className="w-14 h-14 rounded-full object-cover" />
           ) : (
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center text-2xl"
-              style={{ background: 'var(--c-icon-bg)' }}
-            >
-              👤
+            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'var(--c-icon-bg)' }}>
+              <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7 text-gray-400" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
             </div>
           )}
           <div className="flex-1 min-w-0">

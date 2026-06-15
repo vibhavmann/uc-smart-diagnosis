@@ -67,7 +67,7 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
             ) : (
               <div className="flex flex-col gap-2 slide-up">
                 <textarea
-                  className="w-full border rounded-xl p-3 text-sm resize-none outline-none min-h-[90px] text-gray-900 placeholder-purple-300 bg-white"
+                  className="w-full border rounded-xl p-3 text-sm resize-none outline-none min-h-[90px] text-gray-900 placeholder-gray-400 bg-white"
                   style={{ fontFamily: 'inherit', borderColor: 'var(--c-border)' }}
                   placeholder="Describe it in your own words…"
                   value={customClarifyText}
@@ -163,7 +163,7 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
             <div className="px-4 pb-4 fade-in space-y-3">
               <p className="text-xs text-gray-500">Add context and we'll refine the diagnosis — e.g. "it makes a clicking noise" or "happens only at night"</p>
               <textarea
-                className="w-full border rounded-xl p-3 text-sm resize-none outline-none min-h-[80px] text-gray-900 placeholder-purple-300 bg-white"
+                className="w-full border rounded-xl p-3 text-sm resize-none outline-none min-h-[80px] text-gray-900 placeholder-gray-400 bg-white"
                 style={{ fontFamily: 'inherit', borderColor: 'var(--c-border)' }}
                 placeholder="Tell us more about the problem…"
                 value={detailText}
