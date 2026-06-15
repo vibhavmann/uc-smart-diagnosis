@@ -25,8 +25,11 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
   const [openImpact, setOpenImpact] = useState(false);
   const [showAddDetail, setShowAddDetail] = useState(false);
   const [detailText, setDetailText] = useState('');
+  const [showCustomClarify, setShowCustomClarify] = useState(false);
+  const [customClarifyText, setCustomClarifyText] = useState('');
 
   if (result.needsClarification && !clarifyAns) {
+    const optionCount = (result.clarifyingOptions || []).length;
     return (
       <div className="flex flex-col h-full bg-white dark:bg-[#241847]">
         <div className="px-4 pt-10 pb-4 border-b border-purple-100 dark:border-purple-900/40 flex-shrink-0">
@@ -34,7 +37,7 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
           <h1 className="text-lg font-bold text-gray-900 dark:text-white">One quick question</h1>
           <p className="text-sm text-gray-500 dark:text-purple-300/70 mt-0.5">Helps us send the right pro</p>
         </div>
-        <div className="flex-1 scroll-hide px-4 pt-6">
+        <div className="flex-1 scroll-hide px-4 pt-6 pb-6">
           <div className="rounded-2xl p-5 mb-5 slide-up border border-purple-200 dark:border-purple-700/50" style={{ background: 'var(--c-icon-bg)' }}>
             <span className="text-2xl block mb-3">🤔</span>
             <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">{result.clarifyingQuestion}</p>
@@ -51,6 +54,42 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
                 {opt}
               </button>
             ))}
+
+            {/* "None of these" free-text fallback */}
+            {!showCustomClarify ? (
+              <button
+                className="w-full text-left py-3.5 px-4 rounded-2xl border text-sm font-medium slide-up"
+                style={{ borderColor: 'var(--c-border)', color: P, background: 'transparent', animationDelay: `${optionCount * 60}ms` }}
+                onClick={() => setShowCustomClarify(true)}
+              >
+                💬 None of these — describe it yourself
+              </button>
+            ) : (
+              <div className="flex flex-col gap-2 slide-up">
+                <textarea
+                  className="w-full border rounded-xl p-3 text-sm resize-none outline-none min-h-[90px] text-gray-900 dark:text-white placeholder-purple-300 dark:placeholder-purple-600 bg-white dark:bg-[#1A1033]"
+                  style={{ fontFamily: 'inherit', borderColor: 'var(--c-border)' }}
+                  placeholder="Describe it in your own words…"
+                  value={customClarifyText}
+                  onChange={(e) => setCustomClarifyText(e.target.value)}
+                  autoFocus
+                />
+                <button
+                  className="w-full py-3 rounded-xl text-white text-sm font-semibold active:opacity-80"
+                  style={{ background: customClarifyText.trim() ? P : '#D1D5DB' }}
+                  disabled={!customClarifyText.trim()}
+                  onClick={() => { if (customClarifyText.trim()) { setClarifyAns(customClarifyText.trim()); onClarify(customClarifyText.trim()); } }}
+                >
+                  Re-diagnose with this detail ✨
+                </button>
+                <button
+                  className="text-xs text-purple-400 text-center py-1"
+                  onClick={() => setShowCustomClarify(false)}
+                >
+                  ← Back to options
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
