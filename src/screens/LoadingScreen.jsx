@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 
-const P = '#7C3AED';
+const P = '#111111';
 const STEPS = ['Reading your description…', 'Matching service catalog…', 'Estimating realistic price…'];
 
 export default function LoadingScreen() {
@@ -13,7 +13,7 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-[#241847] items-center justify-center px-8">
+    <div className="flex flex-col h-full bg-white items-center justify-center px-8">
       <div
         className="w-16 h-16 rounded-3xl mb-8 flex items-center justify-center text-3xl pulse"
         style={{ background: 'var(--c-icon-bg)' }}
@@ -35,7 +35,7 @@ export default function LoadingScreen() {
             >
               {i < step ? '✓' : ''}
             </div>
-            <p className={`text-sm ${i <= step ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 dark:text-gray-600'}`}>{s}</p>
+            <p className={`text-sm ${i <= step ? 'text-gray-800' : 'text-gray-400'}`}>{s}</p>
           </div>
         ))}
       </div>

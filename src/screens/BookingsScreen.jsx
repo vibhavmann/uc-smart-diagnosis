@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import BottomNav from '../components/BottomNav';
 import Badge from '../components/Badge';
 import { supabase } from '../lib/supabase';
 
-const P = '#7C3AED';
+const P = '#111111';
 
 function fmt(n) { return (n || 0).toLocaleString('en-IN'); }
 
@@ -20,7 +20,7 @@ function serviceIcon(name = '') {
 
 function BookingCard({ b }) {
   return (
-    <div className="bg-white dark:bg-[#241847] rounded-2xl p-4 border border-purple-100 dark:border-purple-800/40 slide-up">
+    <div className="bg-white rounded-2xl p-4 border border-gray-200 slide-up">
       <div className="flex items-start gap-3 mb-3">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
@@ -30,22 +30,22 @@ function BookingCard({ b }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{b.service}</p>
+            <p className="text-sm font-bold text-gray-900 truncate">{b.service}</p>
             <Badge variant="green">Confirmed</Badge>
           </div>
-          {b.variant && <p className="text-xs text-gray-500 dark:text-purple-300/70 mt-0.5">{b.variant}</p>}
+          {b.variant && <p className="text-xs text-gray-500 mt-0.5">{b.variant}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="rounded-xl p-2.5" style={{ background: 'var(--c-bg)' }}>
-          <p className="text-gray-400 dark:text-gray-500 mb-0.5">Slot</p>
-          <p className="font-semibold text-gray-800 dark:text-gray-200">
+          <p className="text-gray-400 mb-0.5">Slot</p>
+          <p className="font-semibold text-gray-800">
             {b.slot ? `${b.slot.day}, ${b.slot.time}` : b.slot_day ? `${b.slot_day}, ${b.slot_time}` : '—'}
           </p>
         </div>
         <div className="rounded-xl p-2.5" style={{ background: 'var(--c-bg)' }}>
-          <p className="text-gray-400 dark:text-gray-500 mb-0.5">Estimate</p>
+          <p className="text-gray-400 mb-0.5">Estimate</p>
           <p className="font-semibold" style={{ color: P }}>
             ₹{fmt(b.priceLow ?? b.price_low)}–{fmt(b.priceHigh ?? b.price_high)}
           </p>
@@ -53,8 +53,8 @@ function BookingCard({ b }) {
       </div>
 
       <div className="mt-2.5 flex items-center justify-between">
-        <p className="text-[10px] text-gray-400 dark:text-gray-500">
-          Booking ID: <span className="font-semibold text-gray-600 dark:text-gray-400">{b.id}</span>
+        <p className="text-[10px] text-gray-400">
+          Booking ID: <span className="font-semibold text-gray-600">{b.id}</span>
         </p>
         <Badge variant="blue">Upcoming</Badge>
       </div>
@@ -85,9 +85,9 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, us
 
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
-      <div className="bg-white dark:bg-[#241847] px-4 pt-10 pb-4 border-b border-purple-100 dark:border-purple-900/40 flex-shrink-0">
-        <h1 className="text-lg font-bold text-gray-900 dark:text-white">My Bookings</h1>
-        <p className="text-sm text-gray-500 dark:text-purple-300/70 mt-0.5">
+      <div className="bg-white px-4 pt-10 pb-4 border-b border-gray-200 flex-shrink-0">
+        <h1 className="text-lg font-bold text-gray-900">My Bookings</h1>
+        <p className="text-sm text-gray-500 mt-0.5">
           {user && supabase ? 'Synced to your account' : 'Current session only'}
         </p>
       </div>
@@ -100,8 +100,8 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, us
         ) : isEmpty ? (
           <div className="flex flex-col items-center justify-center h-full text-center pb-16">
             <span className="text-5xl mb-4">📋</span>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">No bookings yet</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mb-5">
+            <p className="text-sm font-semibold text-gray-700 mb-1">No bookings yet</p>
+            <p className="text-xs text-gray-400 mb-5">
               Use Smart Diagnosis to book your first service
             </p>
             <button

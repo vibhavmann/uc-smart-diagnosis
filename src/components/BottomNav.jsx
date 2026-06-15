@@ -1,4 +1,4 @@
-const P = '#7C3AED';
+﻿const P = '#111111';
 const ITEMS = [
   { id: 'home',     icon: '🏠', label: 'Home' },
   { id: 'bookings', icon: '📋', label: 'Bookings' },
@@ -8,14 +8,14 @@ const ITEMS = [
 
 export default function BottomNav({ active = 'home', onNavigate }) {
   return (
-    <div className="flex border-t border-purple-100 dark:border-purple-900/40 bg-white dark:bg-[#241847] flex-shrink-0">
+    <div className="flex border-t border-gray-200 bg-white flex-shrink-0">
       {ITEMS.map((it) => {
         const isActive = it.id === active;
         return (
           <button
             key={it.id}
             className="flex-1 flex flex-col items-center py-2.5 gap-0.5 transition-opacity active:opacity-60"
-            style={{ color: isActive ? P : '#A78BFA' }}
+            style={{ color: isActive ? P : '#9CA3AF' }}
             onClick={() => onNavigate && onNavigate(it.id)}
           >
             <span className="text-lg leading-none">{it.icon}</span>
