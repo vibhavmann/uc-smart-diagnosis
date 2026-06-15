@@ -147,6 +147,7 @@ function AppInner() {
               onDiagnose={diagnose}
               error={error}
               demoText={demoText}
+              onNavigate={navigate}
             />
           )}
           {screen === 'loading' && <LoadingScreen />}

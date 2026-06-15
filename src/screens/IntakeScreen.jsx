@@ -1,10 +1,11 @@
 ﻿import { useState, useRef, useEffect } from 'react';
 import { CHIPS } from '../catalog';
+import BottomNav from '../components/BottomNav';
 
 const P = '#111111';
 const DEMO_CHIP = 'AC running but not cooling';
 
-export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
+export default function IntakeScreen({ onBack, onDiagnose, error, demoText, onNavigate }) {
   const [text, setText] = useState(demoText || '');
   const [img, setImg] = useState(null);
   const [activeChip, setActiveChip] = useState(demoText ? DEMO_CHIP : null);
@@ -135,7 +136,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
         )}
       </div>
 
-      <div className="px-4 pb-8 pt-3 border-t border-gray-200 flex-shrink-0 bg-white">
+      <div className="px-4 pb-3 pt-3 border-t border-gray-200 flex-shrink-0 bg-white">
         <button
           className="w-full py-4 rounded-2xl text-white font-semibold text-sm"
           style={{ background: text.trim() && !busy ? P : '#D1D5DB' }}
@@ -145,6 +146,8 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
           {busy ? 'Diagnosing…' : isDemo ? `Diagnose my problem ✨  (${countdown}s)` : 'Diagnose my problem ✨'}
         </button>
       </div>
+
+      <BottomNav active="explore" onNavigate={onNavigate} />
     </div>
   );
 }
