@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const G = '#0B6E4F';
+const P = '#7C3AED';
 const SLOTS = [
   { day: 'Today', time: '2:00 – 4:00 PM', ok: true },
   { day: 'Today', time: '5:00 – 7:00 PM', ok: false },
@@ -15,31 +15,31 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
   const [slot, setSlot] = useState(null);
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900">
-      <div className="px-4 pt-10 pb-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
-        <button onClick={onBack} className="text-gray-400 dark:text-gray-500 text-sm mb-3 block">← Back</button>
+    <div className="flex flex-col h-full bg-white dark:bg-[#241847]">
+      <div className="px-4 pt-10 pb-4 border-b border-purple-100 dark:border-purple-900/40 flex-shrink-0">
+        <button onClick={onBack} className="text-purple-400 text-sm mb-3 block">← Back</button>
         <h1 className="text-lg font-bold text-gray-900 dark:text-white">Confirm Booking</h1>
       </div>
 
       <div className="flex-1 scroll-hide px-4 pt-4 pb-4 space-y-4">
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-4">
-          <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Service</p>
+        <div className="rounded-2xl p-4 border border-purple-100 dark:border-purple-800/40" style={{ background: 'var(--c-icon-bg)' }}>
+          <p className="text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-1">Service</p>
           <p className="text-sm font-bold text-gray-900 dark:text-white">
             {result.service}{result.variant ? ` · ${result.variant}` : ''}
           </p>
           <div className="flex items-baseline gap-1 mt-2">
-            <span className="font-bold text-base" style={{ color: G }}>₹{fmt(result.priceLow)}</span>
-            <span className="text-xs text-gray-400 dark:text-gray-500">– ₹{fmt(result.priceHigh)} est.</span>
+            <span className="font-bold text-base" style={{ color: P }}>₹{fmt(result.priceLow)}</span>
+            <span className="text-xs text-gray-400 dark:text-purple-300/70">– ₹{fmt(result.priceHigh)} est.</span>
           </div>
         </div>
 
         <div>
-          <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Saved Address</p>
-          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-4 flex items-start gap-3">
+          <p className="text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-2">Saved Address</p>
+          <div className="bg-white dark:bg-[#241847] border border-purple-100 dark:border-purple-800/40 rounded-2xl p-4 flex items-start gap-3">
             <span className="text-lg">📍</span>
             <div>
               <p className="text-sm font-semibold text-gray-900 dark:text-white">Home</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              <p className="text-xs text-gray-500 dark:text-purple-300/70 mt-0.5">
                 42, 3rd Floor, 7th Cross, Koramangala 4th Block, Bangalore – 560034
               </p>
             </div>
@@ -47,7 +47,7 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
         </div>
 
         <div>
-          <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Choose a Slot</p>
+          <p className="text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-2">Choose a Slot</p>
           <div className="space-y-2">
             {SLOTS.map((s, i) => (
               <button
@@ -59,7 +59,7 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
                   !s.ok
                     ? { opacity: 0.4, cursor: 'not-allowed', background: 'var(--c-bg)', borderColor: 'var(--c-border)' }
                     : slot === i
-                    ? { background: G, borderColor: 'transparent' }
+                    ? { background: P, borderColor: 'transparent' }
                     : { background: 'var(--c-surface)', borderColor: 'var(--c-border)' }
                 }
               >
@@ -84,10 +84,10 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
         )}
       </div>
 
-      <div className="px-4 pb-8 pt-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex-shrink-0">
+      <div className="px-4 pb-8 pt-3 bg-white dark:bg-[#241847] border-t border-purple-100 dark:border-purple-900/40 flex-shrink-0">
         <button
           className="w-full py-4 rounded-2xl text-white font-semibold text-sm"
-          style={{ background: slot !== null ? G : '#D1D5DB' }}
+          style={{ background: slot !== null ? P : '#D1D5DB' }}
           onClick={() => slot !== null && onConfirm(SLOTS[slot])}
         >
           Confirm Booking

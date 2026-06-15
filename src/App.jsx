@@ -138,7 +138,7 @@ function AppInner() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white sm:bg-[#94A3B8] dark:bg-slate-900 sm:dark:bg-slate-950 sm:flex sm:items-center sm:justify-center sm:py-8 sm:px-4">
+    <div className="w-full min-h-screen bg-white sm:bg-[#DDD6FE] dark:bg-[#1A1033] sm:dark:bg-[#0F0A1E] sm:flex sm:items-center sm:justify-center sm:py-8 sm:px-4">
       <div
         className="relative flex flex-col overflow-hidden w-full h-screen sm:w-[390px] sm:h-[844px] sm:rounded-[44px] sm:flex-shrink-0 sm:phone"
         style={{ background: 'var(--c-surface)' }}

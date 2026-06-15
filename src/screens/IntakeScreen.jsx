@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { CHIPS } from '../catalog';
 
-const G = '#0B6E4F';
+const P = '#7C3AED';
 const DEMO_CHIP = 'AC running but not cooling';
 
 export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
@@ -42,9 +42,9 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900">
-      <div className="px-4 pt-10 pb-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
-        <button onClick={onBack} className="flex items-center gap-1 text-gray-400 dark:text-gray-500 text-sm mb-3">← Back</button>
+    <div className="flex flex-col h-full bg-white dark:bg-[#241847]">
+      <div className="px-4 pt-10 pb-4 border-b border-purple-100 dark:border-purple-900/40 flex-shrink-0">
+        <button onClick={onBack} className="flex items-center gap-1 text-purple-400 dark:text-purple-400 text-sm mb-3">← Back</button>
         <h1 className="text-lg font-bold text-gray-900 dark:text-white">
           {isDemo ? '✨ Live Demo' : 'Smart Diagnosis'}
         </h1>
@@ -62,8 +62,8 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
         )}
 
         <textarea
-          className="w-full border border-gray-200 dark:border-gray-700 rounded-2xl p-4 text-sm resize-none outline-none min-h-[110px] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 bg-white dark:bg-gray-800"
-          style={{ fontFamily: 'inherit', borderColor: isDemo ? '#FCD34D' : undefined }}
+          className="w-full border rounded-2xl p-4 text-sm resize-none outline-none min-h-[110px] text-gray-900 dark:text-white placeholder-purple-300 dark:placeholder-purple-600 bg-white dark:bg-[#1A1033]"
+          style={{ fontFamily: 'inherit', borderColor: isDemo ? '#FCD34D' : 'var(--c-border)' }}
           placeholder={'Describe your problem in your own words…\ne.g. "My AC runs but the room won\'t cool"'}
           value={text}
           onChange={(e) => { setText(e.target.value); setActiveChip(null); }}
@@ -81,7 +81,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
                   className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
                   style={
                     activeChip === c.label
-                      ? { background: G, color: '#fff', borderColor: 'transparent' }
+                      ? { background: P, color: '#fff', borderColor: 'transparent' }
                       : { background: 'var(--c-surface)', color: '#4B5563', borderColor: 'var(--c-border)' }
                   }
                 >
@@ -94,7 +94,8 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
 
         {!isDemo && (
           <div
-            className="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer"
+            className="border-2 border-dashed rounded-2xl p-4 flex flex-col items-center gap-2 cursor-pointer"
+            style={{ borderColor: 'var(--c-border)' }}
             onClick={() => fileRef.current && fileRef.current.click()}
           >
             {img ? (
@@ -108,7 +109,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
             ) : (
               <>
                 <span className="text-2xl">📷</span>
-                <p className="text-xs text-gray-500 dark:text-gray-400 text-center">Tap to add a photo (optional)<br />Helps the AI diagnose faster</p>
+                <p className="text-xs text-purple-400 dark:text-purple-400 text-center">Tap to add a photo (optional)<br />Helps the AI diagnose faster</p>
               </>
             )}
           </div>
@@ -122,10 +123,10 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText }) {
         )}
       </div>
 
-      <div className="px-4 pb-8 pt-3 border-t border-gray-100 dark:border-gray-800 flex-shrink-0 bg-white dark:bg-gray-900">
+      <div className="px-4 pb-8 pt-3 border-t border-purple-100 dark:border-purple-900/40 flex-shrink-0 bg-white dark:bg-[#241847]">
         <button
           className="w-full py-4 rounded-2xl text-white font-semibold text-sm"
-          style={{ background: text.trim() && !busy ? G : '#D1D5DB' }}
+          style={{ background: text.trim() && !busy ? P : '#D1D5DB' }}
           onClick={go}
           disabled={!text.trim() || busy}
         >

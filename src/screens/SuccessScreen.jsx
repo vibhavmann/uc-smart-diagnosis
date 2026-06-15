@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-const G = '#0B6E4F';
+const P = '#7C3AED';
 function fmt(n) { return (n || 0).toLocaleString('en-IN'); }
 
 export default function SuccessScreen({ result, slot, onHome }) {
   const [bid] = useState(() => 'UC' + Math.floor(Math.random() * 90000 + 10000));
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900 items-center justify-center px-6 text-center">
+    <div className="flex flex-col h-full bg-white dark:bg-[#241847] items-center justify-center px-6 text-center">
       <div className="w-20 h-20 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-4xl mb-5 slide-up">
         ✅
       </div>
@@ -30,7 +30,7 @@ export default function SuccessScreen({ result, slot, onHome }) {
             <span className="text-gray-500 dark:text-gray-400 flex-shrink-0">{row.l}</span>
             <span
               className="font-semibold text-right"
-              style={{ color: row.green ? G : undefined }}
+              style={{ color: row.green ? P : undefined }}
             >
               <span className={!row.green ? 'text-gray-900 dark:text-white' : ''}>{row.v}</span>
             </span>
@@ -39,7 +39,7 @@ export default function SuccessScreen({ result, slot, onHome }) {
       </div>
       <button
         className="w-full py-4 rounded-2xl text-white font-semibold text-sm slide-up"
-        style={{ background: G }}
+        style={{ background: P }}
         onClick={onHome}
       >
         Back to Home

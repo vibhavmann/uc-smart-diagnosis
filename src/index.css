@@ -12,17 +12,19 @@ body {
 
 /* Semantic color tokens — switch automatically with .dark on <html> */
 :root {
-  --c-bg: #F6F6F6;
+  --c-bg: #F5F3FF;
   --c-surface: #FFFFFF;
-  --c-icon-bg: #E8F5F0;
-  --c-border: #F3F4F6;
+  --c-icon-bg: #EDE9FE;
+  --c-border: #E9D5FF;
+  --c-accent: #7C3AED;
 }
 
 .dark {
-  --c-bg: #0F172A;
-  --c-surface: #1E293B;
-  --c-icon-bg: #064E3B;
-  --c-border: #334155;
+  --c-bg: #1A1033;
+  --c-surface: #241847;
+  --c-icon-bg: #3D2873;
+  --c-border: #4C3580;
+  --c-accent: #A78BFA;
 }
 
 #root {
@@ -35,17 +37,17 @@ body {
 /* Desktop surround */
 @media (min-width: 640px) {
   #root {
-    background: #94A3B8;
+    background: #DDD6FE;
     align-items: center;
     justify-content: center;
     padding: 32px 16px;
   }
 }
 
-.dark #root { background: #0F172A; }
+.dark #root { background: #1A1033; }
 
 @media (min-width: 640px) {
-  .dark #root { background: #020617; }
+  .dark #root { background: #0F0A1E; }
 }
 
 .phone {

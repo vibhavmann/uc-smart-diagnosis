@@ -1,7 +1,7 @@
 import { useAuth } from '../contexts/AuthContext';
 import BottomNav from '../components/BottomNav';
 
-const G = '#0B6E4F';
+const P = '#7C3AED';
 
 export default function AccountScreen({ onNavigate, onLogin }) {
   const { user, signOut, hasSupabase } = useAuth();
@@ -9,9 +9,9 @@ export default function AccountScreen({ onNavigate, onLogin }) {
   if (!user) {
     return (
       <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
-        <div className="bg-white dark:bg-gray-900 px-4 pt-10 pb-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
+        <div className="bg-white dark:bg-[#241847] px-4 pt-10 pb-4 border-b border-purple-100 dark:border-purple-900/40 flex-shrink-0">
           <h1 className="text-lg font-bold text-gray-900 dark:text-white">Account</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+          <p className="text-sm text-gray-500 dark:text-purple-300/70 mt-0.5">
             {hasSupabase ? 'Sign in to access your profile' : 'Auth not yet configured'}
           </p>
         </div>
@@ -28,7 +28,7 @@ export default function AccountScreen({ onNavigate, onLogin }) {
           {hasSupabase && (
             <button
               className="px-5 py-2.5 rounded-2xl text-white text-sm font-semibold"
-              style={{ background: G }}
+              style={{ background: P}}
               onClick={onLogin}
             >
               Sign in →
@@ -49,13 +49,13 @@ export default function AccountScreen({ onNavigate, onLogin }) {
 
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
-      <div className="bg-white dark:bg-gray-900 px-4 pt-10 pb-4 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
+      <div className="bg-white dark:bg-[#241847] px-4 pt-10 pb-4 border-b border-purple-100 dark:border-purple-900/40 flex-shrink-0">
         <h1 className="text-lg font-bold text-gray-900 dark:text-white">Account</h1>
       </div>
 
       <div className="flex-1 scroll-hide px-4 pt-4 pb-4 space-y-3">
         {/* Profile card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 flex items-center gap-4 slide-up">
+        <div className="bg-white dark:bg-[#241847] rounded-2xl p-4 border border-purple-100 dark:border-purple-800/40 flex items-center gap-4 slide-up">
           {avatar ? (
             <img src={avatar} alt={name} className="w-14 h-14 rounded-full object-cover" />
           ) : (
@@ -68,10 +68,10 @@ export default function AccountScreen({ onNavigate, onLogin }) {
           )}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-gray-900 dark:text-white">{name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{user.email}</p>
+            <p className="text-xs text-gray-500 dark:text-purple-300/70 mt-0.5 truncate">{user.email}</p>
             <span
               className="inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full text-white"
-              style={{ background: G }}
+              style={{ background: P}}
             >
               Verified
             </span>
@@ -79,7 +79,7 @@ export default function AccountScreen({ onNavigate, onLogin }) {
         </div>
 
         {/* App info */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden slide-up">
+        <div className="bg-white dark:bg-[#241847] rounded-2xl border border-purple-100 dark:border-purple-800/40 overflow-hidden slide-up">
           {[
             { label: 'App', value: 'UC Smart Diagnosis' },
             { label: 'AI Model', value: 'Claude Sonnet 4.6' },
@@ -87,9 +87,9 @@ export default function AccountScreen({ onNavigate, onLogin }) {
           ].map((row, i, arr) => (
             <div
               key={row.label}
-              className={`flex items-center justify-between px-4 py-3.5 text-sm ${i < arr.length - 1 ? 'border-b border-gray-50 dark:border-gray-700' : ''}`}
+              className={`flex items-center justify-between px-4 py-3.5 text-sm ${i < arr.length - 1 ? 'border-b border-purple-50 dark:border-purple-800/40' : ''}`}
             >
-              <span className="text-gray-500 dark:text-gray-400">{row.label}</span>
+              <span className="text-gray-500 dark:text-purple-300/70">{row.label}</span>
               <span className="font-semibold text-gray-900 dark:text-white">{row.value}</span>
             </div>
           ))}
