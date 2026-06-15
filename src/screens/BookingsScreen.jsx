@@ -85,7 +85,7 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, us
 
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
-      <div className="bg-white px-4 pt-10 pb-4 border-b border-gray-200 flex-shrink-0">
+      <div className="bg-white px-4 pt-safe pb-4 border-b border-gray-200 flex-shrink-0">
         <h1 className="text-lg font-bold text-gray-900">My Bookings</h1>
         <p className="text-sm text-gray-500 mt-0.5">
           {user && supabase ? 'Synced to your account' : 'Current session only'}

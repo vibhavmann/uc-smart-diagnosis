@@ -12,7 +12,7 @@ export default function HomeScreen({ onIntake, onDemo, onNavigate }) {
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
       {/* top bar */}
-      <div className="bg-white px-4 pt-10 pb-3 border-b border-gray-200 flex-shrink-0">
+      <div className="bg-white px-4 pt-safe pb-3 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center gap-2 mb-3">
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 mb-0.5 uppercase tracking-wide">Delivering to</p>

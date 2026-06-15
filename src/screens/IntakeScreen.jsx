@@ -56,7 +56,7 @@ export default function IntakeScreen({ onBack, onDiagnose, error, demoText, onNa
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <div className="px-4 pt-10 pb-4 border-b border-gray-200 flex-shrink-0">
+      <div className="px-4 pt-safe pb-4 border-b border-gray-200 flex-shrink-0">
         <button onClick={onBack} className="flex items-center gap-1 text-gray-500 text-sm mb-3">← Back</button>
         <h1 className="text-lg font-bold text-gray-900">
           {isDemo ? '✨ Live Demo' : 'Smart Diagnosis'}

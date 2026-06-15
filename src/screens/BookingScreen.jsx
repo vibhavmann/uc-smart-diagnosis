@@ -16,7 +16,7 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <div className="px-4 pt-10 pb-4 border-b border-gray-200 flex-shrink-0">
+      <div className="px-4 pt-safe pb-4 border-b border-gray-200 flex-shrink-0">
         <button onClick={onBack} className="text-gray-500 text-sm mb-3 block">← Back</button>
         <h1 className="text-lg font-bold text-gray-900">Confirm Booking</h1>
       </div>
@@ -84,7 +84,7 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
         )}
       </div>
 
-      <div className="px-4 pb-8 pt-3 bg-white border-t border-gray-200 flex-shrink-0">
+      <div className="px-4 pb-safe pt-3 bg-white border-t border-gray-200 flex-shrink-0">
         <button
           className="w-full py-4 rounded-2xl text-white font-semibold text-sm"
           style={{ background: slot !== null ? P : '#D1D5DB' }}

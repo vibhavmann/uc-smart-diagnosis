@@ -8,6 +8,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  /* Prevent elastic overscroll showing white gaps on iOS */
+  overscroll-behavior: none;
 }
 
 /* Semantic color tokens */
@@ -16,10 +18,14 @@ body {
   --c-surface: #FFFFFF;
   --c-icon-bg: #F0F0F0;
   --c-border: #E5E5E5;
+  /* Safe area insets for iPhone notch / home indicator */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
 }
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport height — shrinks when mobile URL bar hides */
   background: #fff;
   display: flex;
   flex-direction: column;
@@ -34,6 +40,10 @@ body {
     padding: 32px 16px;
   }
 }
+
+/* Safe-area padding helpers */
+.pb-safe  { padding-bottom: max(12px, env(safe-area-inset-bottom, 12px)); }
+.pt-safe  { padding-top:    max(40px, env(safe-area-inset-top, 40px)); }
 
 .phone {
   box-shadow: 0 40px 80px rgba(0,0,0,0.35), 0 0 0 1.5px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(255,255,255,0.1);

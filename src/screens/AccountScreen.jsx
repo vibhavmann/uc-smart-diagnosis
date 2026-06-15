@@ -9,7 +9,7 @@ export default function AccountScreen({ onNavigate, onLogin }) {
   if (!user) {
     return (
       <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
-        <div className="bg-white px-4 pt-10 pb-4 border-b border-gray-200 flex-shrink-0">
+        <div className="bg-white px-4 pt-safe pb-4 border-b border-gray-200 flex-shrink-0">
           <h1 className="text-lg font-bold text-gray-900">Account</h1>
           <p className="text-sm text-gray-500 mt-0.5">
             {hasSupabase ? 'Sign in to access your profile' : 'Auth not yet configured'}
@@ -53,7 +53,7 @@ export default function AccountScreen({ onNavigate, onLogin }) {
 
   return (
     <div className="flex flex-col h-full" style={{ background: 'var(--c-bg)' }}>
-      <div className="bg-white px-4 pt-10 pb-4 border-b border-gray-200 flex-shrink-0">
+      <div className="bg-white px-4 pt-safe pb-4 border-b border-gray-200 flex-shrink-0">
         <h1 className="text-lg font-bold text-gray-900">Account</h1>
       </div>
 

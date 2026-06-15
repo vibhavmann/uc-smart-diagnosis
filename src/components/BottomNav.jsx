@@ -41,7 +41,7 @@ const ITEMS = [
 
 export default function BottomNav({ active = 'home', onNavigate }) {
   return (
-    <div className="flex border-t border-gray-200 bg-white flex-shrink-0">
+    <div className="flex border-t border-gray-200 bg-white flex-shrink-0 pb-safe">
       {ITEMS.map(({ id, Icon, label }) => {
         const isActive = id === active;
         return (
