@@ -21,6 +21,7 @@ Schema (MUST match exactly):
 Rules:
 - Match to the MOST SPECIFIC service and variant possible.
 - If the problem could be 2+ very different services, set needsClarification true and ask ONE focused question.
+- If an image is provided AND the image clearly shows a different problem from what the text describes (e.g. text says "sink leak" but image shows an AC unit dripping), set needsClarification true. Set clarifyingQuestion to "Your text and image seem to describe different issues — which problem do you need help with?" and set clarifyingOptions to the two conflicting services (one from the text, one from the image). Do NOT silently pick one.
 - Price range MUST include likely add-ons/parts — never just echo base price if parts are probable.
 - severity: low=cosmetic/routine, medium=functional problem, high=urgent/safety risk.
 - confidence: how certain you are about the service match.
@@ -57,7 +58,10 @@ Return ONLY a valid JSON object matching this schema exactly:
 RETRIEVED SERVICES (top matches for this query):
 ${serviceBlock}
 
-Rules: Match most specific service. Ask one clarifying question only if genuinely ambiguous. Include likely parts/addons in price. Return ONLY the JSON.`;
+Rules:
+- Match most specific service. Ask one clarifying question only if genuinely ambiguous. Include likely parts/addons in price.
+- If an image is provided AND it clearly shows a different problem from the text description, set needsClarification true and ask the user which problem they need help with, listing both options.
+- Return ONLY the JSON.`;
 }
 
 async function retrieveRelevantServices(description, supabaseUrl, supabaseKey, voyageKey) {
