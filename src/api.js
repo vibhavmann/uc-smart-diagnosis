@@ -21,5 +21,8 @@ export async function callDiagnosis(description, imgBase64, imgType, _unused, cl
     .replace(/```\s*/g, '')
     .trim();
 
-  return JSON.parse(raw);
+  const diagnosis = JSON.parse(raw);
+  // Carry RAG metadata through so the UI can show the inspection panel
+  if (data._rag) diagnosis._rag = data._rag;
+  return diagnosis;
 }

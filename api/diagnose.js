@@ -149,5 +149,17 @@ export default async function handler(req, res) {
   });
 
   const data = await upstream.json();
-  return res.status(upstream.status).json(data);
+
+  // Attach RAG metadata so the frontend can show the inspection panel
+  const ragMeta = {
+    used: !!retrievedServices,
+    count: retrievedServices?.length || 0,
+    services: (retrievedServices || []).map((s) => ({
+      name: s.service_name,
+      category: s.category,
+      similarity: Math.round(s.similarity * 100),
+    })),
+  };
+
+  return res.status(upstream.status).json({ ...data, _rag: ragMeta });
 }

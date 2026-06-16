@@ -27,6 +27,7 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
   const [detailText, setDetailText] = useState('');
   const [showCustomClarify, setShowCustomClarify] = useState(false);
   const [customClarifyText, setCustomClarifyText] = useState('');
+  const [showRag, setShowRag] = useState(false);
 
   if (result.needsClarification && !clarifyAns) {
     const optionCount = (result.clarifyingOptions || []).length;
@@ -180,6 +181,59 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
             </div>
           )}
         </div>
+
+        {/* RAG pipeline inspector */}
+        {result._rag && (
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden slide-up" style={{ animationDelay: '120ms' }}>
+            <button className="w-full flex items-center justify-between px-4 py-3.5" onClick={() => setShowRag(!showRag)}>
+              <div className="flex items-center gap-2">
+                <span className="text-base">🔍</span>
+                <span className="text-sm font-semibold text-gray-900">Inspect RAG Pipeline</span>
+              </div>
+              <span className="text-gray-500 text-sm">{showRag ? '▲' : '▼'}</span>
+            </button>
+            {showRag && (
+              <div className="px-4 pb-4 fade-in space-y-3">
+                {/* Status pill */}
+                <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${result._rag.used ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${result._rag.used ? 'bg-emerald-500' : 'bg-gray-400'}`} />
+                  {result._rag.used
+                    ? `RAG active — ${result._rag.count} of 79 services retrieved`
+                    : 'Full catalog used (clarification re-diagnosis)'}
+                </div>
+
+                {/* Retrieved services with similarity bars */}
+                {result._rag.used && result._rag.services.length > 0 && (
+                  <div className="space-y-2.5">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top semantic matches</p>
+                    {result._rag.services.map((s) => (
+                      <div key={s.name}>
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="min-w-0 flex-1 pr-2">
+                            <p className="text-xs font-semibold text-gray-800 truncate">{s.name}</p>
+                            <p className="text-[10px] text-gray-400">{s.category}</p>
+                          </div>
+                          <span className="text-xs font-bold text-gray-700 flex-shrink-0">{s.similarity}%</span>
+                        </div>
+                        <div className="w-full bg-gray-100 rounded-full h-1.5">
+                          <div
+                            className="h-1.5 rounded-full transition-all"
+                            style={{ width: `${s.similarity}%`, background: s.similarity >= 70 ? '#111111' : s.similarity >= 50 ? '#6B7280' : '#D1D5DB' }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <p className="text-[10px] text-gray-400 leading-relaxed pt-1">
+                  Voyage AI embedded your query and matched it against 79 service vectors in Supabase pgvector.
+                  Only services above the 40% similarity threshold were sent to Claude.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* before / after */}
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden slide-up" style={{ animationDelay: '140ms' }}>
