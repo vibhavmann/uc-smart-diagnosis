@@ -115,6 +115,9 @@ export default async function handler(req, res) {
     retrievedServices = await retrieveRelevantServices(description, supabaseUrl, supabaseKey, voyageKey);
   }
 
+  console.log(retrievedServices
+    ? `RAG active: ${retrievedServices.length} services retrieved`
+    : 'RAG fallback: using full catalog');
   const systemPrompt = buildSystemPrompt(retrievedServices);
 
   const content = [];
