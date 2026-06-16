@@ -39,6 +39,15 @@ function StatusBar() {
   );
 }
 
+async function updateBookingInDB(id, slot, user) {
+  if (!supabase || !user) return;
+  try {
+    await supabase.from('bookings').update({ slot_day: slot.day, slot_time: slot.time }).eq('id', id);
+  } catch (err) {
+    console.warn('Failed to update booking:', err.message);
+  }
+}
+
 async function saveBookingToDB(booking, user) {
   if (!supabase || !user) return;
   try {
@@ -74,6 +83,7 @@ function AppInner() {
   const [bookedSlot, setBookedSlot] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [isClarification, setIsClarification] = useState(false);
+  const [editingBooking, setEditingBooking] = useState(null);
 
   const go = (s) => { setPrevScreen(screen); setScreen(s); };
 
@@ -109,7 +119,24 @@ function AppInner() {
     if (id === 'account')  go('account');
   };
 
+  const startEditBooking = (booking) => {
+    setEditingBooking({
+      ...booking,
+      priceLow: booking.priceLow ?? booking.price_low,
+      priceHigh: booking.priceHigh ?? booking.price_high,
+    });
+    go('booking');
+  };
+
   const confirmBooking = async (slot) => {
+    if (editingBooking) {
+      const updated = { ...editingBooking, slot };
+      setBookings((prev) => prev.map((b) => b.id === editingBooking.id ? updated : b));
+      await updateBookingInDB(editingBooking.id, slot, user);
+      setEditingBooking(null);
+      go('bookings');
+      return;
+    }
     const booking = {
       id: 'UC' + Math.floor(Math.random() * 90000 + 10000),
       service: result.service,
@@ -161,16 +188,17 @@ function AppInner() {
               onBack={() => { setResult(null); setDemoText(null); go('intake'); }}
             />
           )}
-          {screen === 'booking' && result && (
+          {screen === 'booking' && (result || editingBooking) && (
             <BookingScreen
-              result={result}
+              result={editingBooking || result}
               user={user}
-              onBack={() => go('result')}
+              isEditing={!!editingBooking}
+              onBack={() => go(editingBooking ? 'bookings' : 'result')}
               onConfirm={confirmBooking}
             />
           )}
           {screen === 'bookings' && (
-            <BookingsScreen bookings={bookings} onNavigate={navigate} user={user} />
+            <BookingsScreen bookings={bookings} onNavigate={navigate} onEdit={startEditBooking} user={user} />
           )}
           {screen === 'success' && result && (
             <SuccessScreen

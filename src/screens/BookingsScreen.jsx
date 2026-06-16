@@ -18,7 +18,7 @@ function serviceIcon(name = '') {
   return '🔨';
 }
 
-function BookingCard({ b }) {
+function BookingCard({ b, onEdit }) {
   return (
     <div className="bg-white rounded-2xl p-4 border border-gray-200 slide-up">
       <div className="flex items-start gap-3 mb-3">
@@ -56,13 +56,21 @@ function BookingCard({ b }) {
         <p className="text-[10px] text-gray-400">
           Booking ID: <span className="font-semibold text-gray-600">{b.id}</span>
         </p>
-        <Badge variant="blue">Upcoming</Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="blue">Upcoming</Badge>
+          <button
+            className="text-[11px] font-semibold text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1 active:opacity-60 transition-opacity"
+            onClick={() => onEdit(b)}
+          >
+            Reschedule
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default function BookingsScreen({ bookings: localBookings, onNavigate, user }) {
+export default function BookingsScreen({ bookings: localBookings, onNavigate, onEdit, user }) {
   const [dbBookings, setDbBookings] = useState(null);
   const [loadingDb, setLoadingDb] = useState(false);
 
@@ -114,7 +122,7 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, us
           </div>
         ) : (
           <div className="space-y-3">
-            {displayBookings.map((b) => <BookingCard key={b.id} b={b} />)}
+            {displayBookings.map((b) => <BookingCard key={b.id} b={b} onEdit={onEdit} />)}
           </div>
         )}
       </div>

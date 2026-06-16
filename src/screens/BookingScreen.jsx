@@ -11,14 +11,14 @@ const SLOTS = [
 
 function fmt(n) { return (n || 0).toLocaleString('en-IN'); }
 
-export default function BookingScreen({ result, user, onBack, onConfirm }) {
+export default function BookingScreen({ result, user, onBack, onConfirm, isEditing = false }) {
   const [slot, setSlot] = useState(null);
 
   return (
     <div className="flex flex-col h-full bg-white">
       <div className="px-4 pt-safe pb-4 border-b border-gray-200 flex-shrink-0">
         <button onClick={onBack} className="text-gray-500 text-sm mb-3 block">← Back</button>
-        <h1 className="text-lg font-bold text-gray-900">Confirm Booking</h1>
+        <h1 className="text-lg font-bold text-gray-900">{isEditing ? 'Reschedule Booking' : 'Confirm Booking'}</h1>
       </div>
 
       <div className="flex-1 scroll-hide px-4 pt-4 pb-4 space-y-4">
@@ -90,7 +90,7 @@ export default function BookingScreen({ result, user, onBack, onConfirm }) {
           style={{ background: slot !== null ? P : '#D1D5DB' }}
           onClick={() => slot !== null && onConfirm(SLOTS[slot])}
         >
-          Confirm Booking
+          {isEditing ? 'Update Booking' : 'Confirm Booking'}
         </button>
       </div>
     </div>
