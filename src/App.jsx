@@ -48,6 +48,15 @@ async function updateBookingInDB(id, slot, user) {
   }
 }
 
+async function cancelBookingInDB(id, user) {
+  if (!supabase || !user) return;
+  try {
+    await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', id);
+  } catch (err) {
+    console.warn('Failed to cancel booking:', err.message);
+  }
+}
+
 async function saveBookingToDB(booking, user) {
   if (!supabase || !user) return;
   try {
@@ -117,6 +126,11 @@ function AppInner() {
     if (id === 'bookings') go('bookings');
     if (id === 'explore')  goToIntake();
     if (id === 'account')  go('account');
+  };
+
+  const cancelBooking = async (booking) => {
+    setBookings((prev) => prev.filter((b) => b.id !== booking.id));
+    await cancelBookingInDB(booking.id, user);
   };
 
   const startEditBooking = (booking) => {
@@ -198,7 +212,7 @@ function AppInner() {
             />
           )}
           {screen === 'bookings' && (
-            <BookingsScreen bookings={bookings} onNavigate={navigate} onEdit={startEditBooking} user={user} />
+            <BookingsScreen bookings={bookings} onNavigate={navigate} onEdit={startEditBooking} onCancel={cancelBooking} user={user} />
           )}
           {screen === 'success' && result && (
             <SuccessScreen

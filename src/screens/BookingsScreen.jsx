@@ -18,7 +18,9 @@ function serviceIcon(name = '') {
   return '🔨';
 }
 
-function BookingCard({ b, onEdit }) {
+function BookingCard({ b, onEdit, onCancel }) {
+  const [confirmCancel, setConfirmCancel] = useState(false);
+
   return (
     <div className="bg-white rounded-2xl p-4 border border-gray-200 slide-up">
       <div className="flex items-start gap-3 mb-3">
@@ -52,25 +54,52 @@ function BookingCard({ b, onEdit }) {
         </div>
       </div>
 
-      <div className="mt-2.5 flex items-center justify-between">
-        <p className="text-[10px] text-gray-400">
-          Booking ID: <span className="font-semibold text-gray-600">{b.id}</span>
-        </p>
-        <div className="flex items-center gap-2">
+      <div className="mt-2.5">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-[10px] text-gray-400">
+            Booking ID: <span className="font-semibold text-gray-600">{b.id}</span>
+          </p>
           <Badge variant="blue">Upcoming</Badge>
-          <button
-            className="text-[11px] font-semibold text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1 active:opacity-60 transition-opacity"
-            onClick={() => onEdit(b)}
-          >
-            Reschedule
-          </button>
         </div>
+
+        {confirmCancel ? (
+          <div className="flex items-center gap-2 pt-1">
+            <p className="text-xs text-gray-500 flex-1">Cancel this booking?</p>
+            <button
+              className="text-[11px] font-semibold text-white bg-red-500 rounded-xl px-3 py-1 active:opacity-70 transition-opacity"
+              onClick={() => onCancel(b)}
+            >
+              Yes, cancel
+            </button>
+            <button
+              className="text-[11px] font-semibold text-gray-600 border border-gray-200 rounded-xl px-3 py-1 active:opacity-70 transition-opacity"
+              onClick={() => setConfirmCancel(false)}
+            >
+              Keep
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-2 pt-1">
+            <button
+              className="flex-1 text-[11px] font-semibold text-gray-600 border border-gray-200 rounded-xl px-2.5 py-1.5 active:opacity-60 transition-opacity"
+              onClick={() => onEdit(b)}
+            >
+              Reschedule
+            </button>
+            <button
+              className="flex-1 text-[11px] font-semibold text-red-500 border border-red-200 rounded-xl px-2.5 py-1.5 active:opacity-60 transition-opacity"
+              onClick={() => setConfirmCancel(true)}
+            >
+              Cancel booking
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default function BookingsScreen({ bookings: localBookings, onNavigate, onEdit, user }) {
+export default function BookingsScreen({ bookings: localBookings, onNavigate, onEdit, onCancel, user }) {
   const [dbBookings, setDbBookings] = useState(null);
   const [loadingDb, setLoadingDb] = useState(false);
 
@@ -81,6 +110,7 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, on
       .from('bookings')
       .select('*')
       .eq('user_id', user.id)
+      .neq('status', 'cancelled')
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (!error && data) setDbBookings(data);
@@ -122,7 +152,7 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, on
           </div>
         ) : (
           <div className="space-y-3">
-            {displayBookings.map((b) => <BookingCard key={b.id} b={b} onEdit={onEdit} />)}
+            {displayBookings.map((b) => <BookingCard key={b.id} b={b} onEdit={onEdit} onCancel={onCancel} />)}
           </div>
         )}
       </div>
