@@ -87,7 +87,7 @@ async function retrieveRelevantServices(description, supabaseUrl, supabaseKey, v
         'Authorization': `Bearer ${supabaseKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query_embedding: embedding, match_threshold: 0.4, match_count: 5 }),
+      body: JSON.stringify({ query_embedding: embedding, match_threshold: 0.3, match_count: 5 }),
     });
     if (!matchRes.ok) return null;
     return await matchRes.json();
@@ -152,7 +152,7 @@ export default async function handler(req, res) {
 
   // Attach RAG metadata so the frontend can show the inspection panel
   const ragMeta = {
-    used: !!retrievedServices,
+    used: !!(retrievedServices && retrievedServices.length > 0),
     count: retrievedServices?.length || 0,
     services: (retrievedServices || []).map((s) => ({
       name: s.service_name,

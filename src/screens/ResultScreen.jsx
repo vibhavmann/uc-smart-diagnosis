@@ -228,7 +228,7 @@ export default function ResultScreen({ result, onClarify, onBook, onBack }) {
 
                 <p className="text-[10px] text-gray-400 leading-relaxed pt-1">
                   Voyage AI embedded your query and matched it against 79 service vectors in Supabase pgvector.
-                  Only services above the 40% similarity threshold were sent to Claude.
+                  Only services above the 30% similarity threshold were sent to Claude.
                 </p>
               </div>
             )}
