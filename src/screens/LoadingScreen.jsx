@@ -1,16 +1,18 @@
 ﻿import { useState, useEffect } from 'react';
 
 const P = '#111111';
-const STEPS = ['Reading your description…', 'Matching service catalog…', 'Estimating realistic price…'];
+const STEPS_INITIAL = ['Reading your description…', 'Matching service catalog…'];
+const STEPS_CLARIFY = ['Reading your description…', 'Matching service catalog…', 'Estimating realistic price…'];
 
-export default function LoadingScreen() {
+export default function LoadingScreen({ isClarification = false }) {
+  const STEPS = isClarification ? STEPS_CLARIFY : STEPS_INITIAL;
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     const t1 = setTimeout(() => setStep(1), 1300);
-    const t2 = setTimeout(() => setStep(2), 2700);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
+    const t2 = isClarification ? setTimeout(() => setStep(2), 2700) : null;
+    return () => { clearTimeout(t1); if (t2) clearTimeout(t2); };
+  }, [isClarification]);
 
   return (
     <div className="flex flex-col h-full bg-white items-center justify-center px-8">

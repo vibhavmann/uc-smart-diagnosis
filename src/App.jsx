@@ -73,6 +73,7 @@ function AppInner() {
   const [error, setError] = useState(null);
   const [bookedSlot, setBookedSlot] = useState(null);
   const [bookings, setBookings] = useState([]);
+  const [isClarification, setIsClarification] = useState(false);
 
   const go = (s) => { setPrevScreen(screen); setScreen(s); };
 
@@ -80,6 +81,7 @@ function AppInner() {
     setDesc(text);
     setImg(image);
     setError(null);
+    setIsClarification(!!clarification);
     go('loading');
     try {
       const r = await callDiagnosis(
@@ -150,7 +152,7 @@ function AppInner() {
               onNavigate={navigate}
             />
           )}
-          {screen === 'loading' && <LoadingScreen />}
+          {screen === 'loading' && <LoadingScreen isClarification={isClarification} />}
           {screen === 'result' && result && (
             <ResultScreen
               result={result}
