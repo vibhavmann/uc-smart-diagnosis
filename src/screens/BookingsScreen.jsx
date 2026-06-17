@@ -118,6 +118,11 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, on
       });
   }, [user]);
 
+  const handleCancel = async (booking) => {
+    setDbBookings((prev) => prev ? prev.filter((b) => b.id !== booking.id) : null);
+    await onCancel(booking);
+  };
+
   const displayBookings = dbBookings !== null ? dbBookings : [...localBookings].reverse();
   const isEmpty = displayBookings.length === 0 && !loadingDb;
 
@@ -152,7 +157,7 @@ export default function BookingsScreen({ bookings: localBookings, onNavigate, on
           </div>
         ) : (
           <div className="space-y-3">
-            {displayBookings.map((b) => <BookingCard key={b.id} b={b} onEdit={onEdit} onCancel={onCancel} />)}
+            {displayBookings.map((b) => <BookingCard key={b.id} b={b} onEdit={onEdit} onCancel={handleCancel} />)}
           </div>
         )}
       </div>
