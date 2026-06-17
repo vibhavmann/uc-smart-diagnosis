@@ -33,6 +33,7 @@ ${JSON.stringify(CATALOG, null, 2)}`;
 function buildSystemPrompt(retrievedServices) {
   if (!retrievedServices || retrievedServices.length === 0) return SYSTEM_FULL;
 
+  const serviceNames = retrievedServices.map((s) => s.service_name);
   const serviceBlock = retrievedServices
     .map((s) => `${s.category} → ${s.service_name}: ${s.description}`)
     .join('\n');
@@ -59,27 +60,27 @@ RETRIEVED SERVICES (top matches for this query):
 ${serviceBlock}
 
 Rules:
-- Match most specific service. Ask one clarifying question only if genuinely ambiguous. Include likely parts/addons in price.
-- If an image is provided AND it clearly shows a different problem from the text description, set needsClarification true and ask the user which problem they need help with, listing both options.
+- Match the most specific service and variant possible from the retrieved list above.
+- If the problem is genuinely ambiguous between 2+ retrieved services, set needsClarification true and ask ONE focused question. clarifyingOptions MUST be chosen only from these retrieved service names: ${JSON.stringify(serviceNames)}. Do not suggest services outside this list.
+- If an image is provided AND it clearly shows a different problem from the text description, set needsClarification true and ask the user which problem they need help with, listing both options from the retrieved services.
+- Include likely parts/addons in price range.
 - Return ONLY the JSON.`;
 }
 
-async function retrieveRelevantServices(description, supabaseUrl, supabaseKey, voyageKey) {
+async function retrieveRelevantServices(query, supabaseUrl, supabaseKey, voyageKey) {
   try {
-    // 1. Embed the query
     const embedRes = await fetch('https://api.voyageai.com/v1/embeddings', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${voyageKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ model: 'voyage-3', input: [description] }),
+      body: JSON.stringify({ model: 'voyage-3', input: [query] }),
     });
     if (!embedRes.ok) return null;
     const embedData = await embedRes.json();
     const embedding = embedData.data[0].embedding;
 
-    // 2. Query Supabase pgvector for similar services
     const matchRes = await fetch(`${supabaseUrl}/rest/v1/rpc/match_services`, {
       method: 'POST',
       headers: {
@@ -87,7 +88,7 @@ async function retrieveRelevantServices(description, supabaseUrl, supabaseKey, v
         'Authorization': `Bearer ${supabaseKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query_embedding: embedding, match_threshold: 0.3, match_count: 5 }),
+      body: JSON.stringify({ query_embedding: embedding, match_threshold: 0.2, match_count: 8 }),
     });
     if (!matchRes.ok) return null;
     return await matchRes.json();
@@ -109,19 +110,26 @@ export default async function handler(req, res) {
   const apiKey = process.env.ANTHROPIC_KEY || bodyKey;
   if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_KEY env var not set' });
 
-  // RAG retrieval — only runs if Voyage + Supabase are configured
   const voyageKey = process.env.VOYAGE_API_KEY;
   const supabaseUrl = process.env.VITE_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
+  // Always run RAG — combine description + clarification for follow-up calls so the
+  // richer query hits more specific embeddings than the original description alone.
   let retrievedServices = null;
-  if (voyageKey && supabaseUrl && supabaseKey && !clarification) {
-    retrievedServices = await retrieveRelevantServices(description, supabaseUrl, supabaseKey, voyageKey);
+  if (voyageKey && supabaseUrl && supabaseKey) {
+    const ragQuery = clarification ? `${description} ${clarification}` : description;
+    retrievedServices = await retrieveRelevantServices(ragQuery, supabaseUrl, supabaseKey, voyageKey);
   }
 
-  console.log(retrievedServices
-    ? `RAG active: ${retrievedServices.length} services retrieved`
-    : 'RAG fallback: using full catalog');
+  if (retrievedServices && retrievedServices.length > 0) {
+    console.log(`RAG active: ${retrievedServices.length} services retrieved`);
+  } else if (retrievedServices) {
+    console.log('RAG: 0 services above threshold, falling back to full catalog');
+  } else {
+    console.log('RAG: retrieval failed, using full catalog');
+  }
+
   const systemPrompt = buildSystemPrompt(retrievedServices);
 
   const content = [];
@@ -150,7 +158,6 @@ export default async function handler(req, res) {
 
   const data = await upstream.json();
 
-  // Attach RAG metadata so the frontend can show the inspection panel
   const ragMeta = {
     used: !!(retrievedServices && retrievedServices.length > 0),
     count: retrievedServices?.length || 0,
